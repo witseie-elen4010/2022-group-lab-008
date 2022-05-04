@@ -4,6 +4,4 @@
 
 Authors:
 
-Keon Roohani, Enkosi Ngewu, Nomthandazo Magwaza
-
-
+Keon Roohani, Enkosi Ngewu, Nomthandazo Magwaza, Joseph Baggott
