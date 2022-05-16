@@ -1,0 +1,3 @@
+The Following links are used for the coding Convensions
+1) https://www.javatpoint.com/java-naming-conventions
+ 
