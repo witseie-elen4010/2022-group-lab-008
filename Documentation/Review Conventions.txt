@@ -1,0 +1,2 @@
+The Following links details how the code reviews are going to be perform
+1) https://google.github.io/eng-practices/review/reviewer/
