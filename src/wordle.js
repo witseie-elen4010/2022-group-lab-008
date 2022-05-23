@@ -10,14 +10,14 @@ class Wordle {
         if (this.newWord.length < 5) {
             this.newWord = this.newWord + letter
         } else {
-            alert("Word Too Long")
+            // alert("Word Too Long")
         }
     }
 
     enterWord() {
         // have to check size of word
         if (this.newWord.length < 5) {
-            alert("Word Too short")
+            // alert("Word Too short")
         } else {
             //Updating the guessNumber
             this.guessNumber = this.guessNumber + 1;
