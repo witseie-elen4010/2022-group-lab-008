@@ -3,6 +3,7 @@ class Wordle {
     constructor() {
         this.newWord = ''
         this.guessNumber = 1;
+        this.guessWord = 'SUPER'
     }
 
     appendLetter(letter) {
@@ -19,6 +20,27 @@ class Wordle {
         if (this.newWord.length < 5) {
             // alert("Word Too short")
         } else {
+            // change colour of word... 
+            let rowId = '#row' + this.guessNumber
+            let row = document.querySelector(rowId)
+            // changing colour to green and yellow - one loop
+            for (let i = 0; i<this.newWord.length; i++) {
+                for (let j = 0; j<this.newWord.length; j++) {
+                    if (this.newWord[j] == this.guessWord[i]) {
+                        let index = j+1;
+                        let colId = '#col' + index;
+                        let cell = row.querySelector(colId);
+                        cell.style.backgroundColor='#b1b935';
+                        break;
+                    }
+                }
+                if (this.newWord[i] == this.guessWord[i]) {
+                    let index = i+1;
+                    let colId = '#col' + index;
+                    let cell = row.querySelector(colId);
+                    cell.style.backgroundColor='Green';
+                }
+            }
             //Updating the guessNumber
             this.guessNumber = this.guessNumber + 1;
             this.newWord = '';
