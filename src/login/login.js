@@ -32,7 +32,7 @@ app.post('/auth', function (request, response) {
 
 // http://localhost:3000/home
 app.get('/home', function (request, response) {
-    response.sendFile(path.join(__dirname, 'Framework', 'index.html'))
+    response.sendFile(path.join(__dirname, '../', 'index.html'))
 });
 
 app.listen(3000);
