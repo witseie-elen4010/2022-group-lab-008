@@ -16,9 +16,7 @@ class Wordle {
         console.log(this.newWord)
     }
 }
-
 const wordle = new Wordle()
-
 
 const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {
@@ -27,3 +25,5 @@ letterButtons.forEach(button => {
         wordle.updateGrid();
     })
 })
+
+module.exports = {Wordle};
