@@ -2,10 +2,16 @@
 class Wordle {
     constructor() {
         this.newWord = ''
+        this.guessNumber = 1;
     }
 
     appendLetter(letter) {
-        this.newWord = this.newWord + letter
+        // added in functionality such that words can't be longer than five words
+        if (this.newWord.length < 5) {
+            this.newWord = this.newWord + letter
+        } else {
+            alert("Word Too Long")
+        }
     }
 
     updateGrid() {
