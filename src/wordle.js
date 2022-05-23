@@ -14,6 +14,17 @@ class Wordle {
         }
     }
 
+    enterWord() {
+        // have to check size of word
+        if (this.newWord.length < 5) {
+            alert("Word Too short")
+        } else {
+            //Updating the guessNumber
+            this.guessNumber = this.guessNumber + 1;
+            this.newWord = '';
+        }
+    }
+
     updateGrid() {
         
         let row = document.querySelector('#row1')
