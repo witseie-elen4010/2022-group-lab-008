@@ -26,11 +26,21 @@ class Wordle {
     }
 
     updateGrid() {
-        
-        let row = document.querySelector('#row1')
-        let cell = row.querySelector('#col1')
-        cell.innerText = this.newWord[this.newWord.length-1]
-        console.log(this.newWord)
+        let rowId = '#row' + this.guessNumber
+        let row = document.querySelector(rowId)
+
+        // filling the cells with letters in the words
+        for (let i = 1; i<=5; i++) {
+            let colId = '#col' + i
+            let cell = row.querySelector(colId)
+            
+            //filling cell with letters from newWord
+            if (i <= this.newWord.length) {
+                cell.innerText = this.newWord[i-1]
+            } else {
+                cell.innerText = '.'
+            }
+        } 
     }
 }
 const wordle = new Wordle()
