@@ -47,4 +47,10 @@ test("Testing delete function will remove a letter", () => {
     expect(wordle.newWord).toBe("duc");
 })
 
-
+test("Testing delete function will not remove letter when there is no letter to remove", () => {
+    const wordle = new Wordle();
+    wordle.newWord = ""
+    wordle.deleteLetter();
+    expect(wordle.newWord).toBe("");
+    expect(wordle.guessNumber).toBe(1);
+})
