@@ -6,6 +6,11 @@ class Wordle {
         this.guessWord = 'SUPER'
     }
 
+    deleteLetter() {
+        // simply pop from string
+        this.newWord = this.newWord.substring(0, this.newWord.length-1)
+    }
+
     appendLetter(letter) {
         // added in functionality such that words can't be longer than five words
         if (this.newWord.length < 5) {
@@ -20,6 +25,18 @@ class Wordle {
         if (this.newWord.length < 5) {
             // alert("Word Too short")
         } else {
+
+            //Updating the guessNumber
+            this.guessNumber = this.guessNumber + 1;
+            this.newWord = '';
+        }
+    }
+
+    colourWord(){
+        if (this.newWord.length < 5) {
+            // alert("Word Too short")
+        } else {
+
             // change colour of word... 
             let rowId = '#row' + this.guessNumber
             let row = document.querySelector(rowId)
@@ -41,10 +58,8 @@ class Wordle {
                     cell.style.backgroundColor='Green';
                 }
             }
-            //Updating the guessNumber
-            this.guessNumber = this.guessNumber + 1;
-            this.newWord = '';
         }
+              
     }
 
     updateGrid() {
@@ -71,16 +86,15 @@ const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {
     button.addEventListener('click', () => {
 
-        //Three conditionals - 
-        //delete - will be implemented at a later stage
-        //append - alreadu implemented
-        //enter - already implemented
         switch(button.innerText) {
             case 'DEL':
-                console.log('deleteFunction')
+                wordle.deleteLetter();
+                wordle.updateGrid();
                 break;
             case 'ENTER':
+                wordle.colourWord();
                 wordle.enterWord();
+                
                 break;
             default:
                 wordle.appendLetter(button.innerText);
