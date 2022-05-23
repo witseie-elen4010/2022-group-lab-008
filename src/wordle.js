@@ -48,8 +48,22 @@ const wordle = new Wordle()
 const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {
     button.addEventListener('click', () => {
-        wordle.appendLetter(button.innerText);
-        wordle.updateGrid();
+
+        //Three conditionals - 
+        //delete - will be implemented at a later stage
+        //append - alreadu implemented
+        //enter - already implemented
+        switch(button.innerText) {
+            case 'DEL':
+                console.log('deleteFunction')
+                break;
+            case 'ENTER':
+                wordle.enterWord();
+                break;
+            default:
+                wordle.appendLetter(button.innerText);
+                wordle.updateGrid();
+        }
     })
 })
 
