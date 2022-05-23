@@ -21,7 +21,7 @@ test("testing appendLetter function", () => {
 
 test("Testing enter goes to next line", () => {
     const wordle = new Wordle();
-    wordle.newWord = "SUPER"
+    wordle.newWord = "DUCKS"
     wordle.enterWord();
     expect(wordle.guessNumber).toBe(2);
 })
@@ -39,4 +39,12 @@ test("Testing enter does not go to next line when word length is 0", () => {
     wordle.enterWord();
     expect(wordle.guessNumber).toBe(1);
 })
+
+test("Testing delete function will remove a letter", () => {
+    const wordle = new Wordle();
+    wordle.newWord = "duck"
+    wordle.deleteLetter();
+    expect(wordle.newWord).toBe("duc");
+})
+
 

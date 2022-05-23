@@ -25,6 +25,18 @@ class Wordle {
         if (this.newWord.length < 5) {
             // alert("Word Too short")
         } else {
+
+            //Updating the guessNumber
+            this.guessNumber = this.guessNumber + 1;
+            this.newWord = '';
+        }
+    }
+
+    colourWord(){
+        if (this.newWord.length < 5) {
+            // alert("Word Too short")
+        } else {
+
             // change colour of word... 
             let rowId = '#row' + this.guessNumber
             let row = document.querySelector(rowId)
@@ -46,10 +58,8 @@ class Wordle {
                     cell.style.backgroundColor='Green';
                 }
             }
-            //Updating the guessNumber
-            this.guessNumber = this.guessNumber + 1;
-            this.newWord = '';
         }
+              
     }
 
     updateGrid() {
@@ -82,7 +92,9 @@ letterButtons.forEach(button => {
                 wordle.updateGrid();
                 break;
             case 'ENTER':
+                wordle.colourWord();
                 wordle.enterWord();
+                
                 break;
             default:
                 wordle.appendLetter(button.innerText);
