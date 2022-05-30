@@ -103,4 +103,3 @@ letterButtons.forEach(button => {
     })
 })
 
-module.exports = {Wordle};
