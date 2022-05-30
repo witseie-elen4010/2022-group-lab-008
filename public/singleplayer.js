@@ -4,6 +4,19 @@ class Wordle {
         this.newWord = ''
         this.guessNumber = 1;
         this.guessWord = 'SUPER'
+        this.win = null;
+    }
+
+    gameResult() {
+        if (this.guessWord == this.newWord) {
+            alert('Well Done You Win !!!')
+            this.win = true;
+            //console.log("YOU WIN!")
+        }
+        if (this.guessNumber == 6 & this.guessWord != this.newWord) {
+            alert("You Have lost The Game :(")
+            this.win = false;
+        }
     }
 
     deleteLetter() {
@@ -27,12 +40,13 @@ class Wordle {
         } else {
 
             //Updating the guessNumber
+            this.gameResult();
             this.guessNumber = this.guessNumber + 1;
             this.newWord = '';
         }
     }
 
-    colourWord(){
+    colourWord() {
         if (this.newWord.length < 5) {
             // alert("Word Too short")
         } else {
@@ -41,25 +55,25 @@ class Wordle {
             let rowId = '#row' + this.guessNumber
             let row = document.querySelector(rowId)
             // changing colour to green and yellow - one loop
-            for (let i = 0; i<this.newWord.length; i++) {
-                for (let j = 0; j<this.newWord.length; j++) {
+            for (let i = 0; i < this.newWord.length; i++) {
+                for (let j = 0; j < this.newWord.length; j++) {
                     if (this.newWord[j] == this.guessWord[i]) {
-                        let index = j+1;
+                        let index = j + 1;
                         let colId = '#col' + index;
                         let cell = row.querySelector(colId);
-                        cell.style.backgroundColor='#b1b935';
+                        cell.style.backgroundColor = '#b1b935';
                         break;
                     }
                 }
                 if (this.newWord[i] == this.guessWord[i]) {
-                    let index = i+1;
+                    let index = i + 1;
                     let colId = '#col' + index;
                     let cell = row.querySelector(colId);
-                    cell.style.backgroundColor='Green';
+                    cell.style.backgroundColor = 'Green';
                 }
             }
         }
-              
+
     }
 
     updateGrid() {
@@ -81,12 +95,11 @@ class Wordle {
     }
 }
 const wordle = new Wordle()
-
 const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {
     button.addEventListener('click', () => {
-
-        switch(button.innerText) {
+        
+        switch (button.innerText) {
             case 'DEL':
                 wordle.deleteLetter();
                 wordle.updateGrid();
@@ -94,7 +107,6 @@ letterButtons.forEach(button => {
             case 'ENTER':
                 wordle.colourWord();
                 wordle.enterWord();
-                
                 break;
             default:
                 wordle.appendLetter(button.innerText);
@@ -103,3 +115,4 @@ letterButtons.forEach(button => {
     })
 })
 
+module.exports = { Wordle };
