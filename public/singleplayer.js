@@ -56,25 +56,41 @@ class Wordle {
             let row = document.querySelector(rowId)
             // changing colour to green and yellow - one loop
             for (let i = 0; i < this.newWord.length; i++) {
+                let letterId = this.newWord[i]
+                const letterBtn = document.getElementById(letterId)
+                if(letterBtn.style.backgroundColor != "rgb(0, 128, 0)" && letterBtn.style.backgroundColor != "rgb(177, 185, 53)"){
+                    letterBtn.style.backgroundColor = 'Black'
+                }
                 for (let j = 0; j < this.newWord.length; j++) {
                     if (this.newWord[j] == this.guessWord[i]) {
                         let index = j + 1;
                         let colId = '#col' + index;
                         let cell = row.querySelector(colId);
-                        cell.style.backgroundColor = '#b1b935';
+                        cell.style.backgroundColor = "rgb(177, 185, 53)";
+
+                        let letterId = this.guessWord[i]
+                        const letterBtn = document.getElementById(letterId)
+                        console.log(letterBtn.style.backgroundColor)
+                        if(letterBtn.style.backgroundColor != "rgb(0, 128, 0)")
+                            letterBtn.style.backgroundColor = "rgb(177, 185, 53)"
                         break;
-                    }
+                    } 
                 }
                 if (this.newWord[i] == this.guessWord[i]) {
                     let index = i + 1;
                     let colId = '#col' + index;
                     let cell = row.querySelector(colId);
-                    cell.style.backgroundColor = 'Green';
+                    cell.style.backgroundColor = "rgb(0, 128, 0)";
+
+                    let letterId = this.guessWord[i]
+                    const letterBtn = document.getElementById(letterId)
+                    letterBtn.style.backgroundColor = "rgb(0, 128, 0)"
                 }
             }
         }
 
     }
+
 
     updateGrid() {
         let rowId = '#row' + this.guessNumber
