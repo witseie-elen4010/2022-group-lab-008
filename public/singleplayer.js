@@ -98,11 +98,11 @@ class Wordle {
 const wordle = new Wordle()
 
 let backBtn = document.getElementById("backBtn");
-backBtn.setAttribute("hidden", "hidden");
+//backBtn.setAttribute("hidden", "hidden");
 let winMsg = document.getElementById("winMsg");
-winMsg.setAttribute("hidden","hidden");
+//winMsg.setAttribute("hidden","hidden");
 let loseMSg = document.getElementById("loseMsg");
-loseMSg.setAttribute("hidden", "hidden");
+//loseMSg.setAttribute("hidden", "hidden");
 
 const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {
