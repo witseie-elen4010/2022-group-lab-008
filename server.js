@@ -39,10 +39,17 @@ app.post('/', (req, res) => {
     }
 })
 
-
 // singleplayer
 app.get('/singlePlayer', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'singleplayer.html'))
 })
+
+// multiplayer
+app.get('/multiplayer', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'multiplayer.html'))
+})
+
+
+
 
 app.listen(4000)
