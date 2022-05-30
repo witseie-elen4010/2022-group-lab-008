@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 const path = require('path')
 
-let password = 'joseph'
-let username = 'swaggott'
+let password = 'b'
+let username = 'a'
 
 // adding the path to public
 app.use("/public", express.static('./public/'));
@@ -27,15 +27,22 @@ app.get('/register', (req, res) => {
     res.render('signUp')
 })
 
+// AfterLogin
+app.post('/', (req, res) => {
+    if(req.body.password == password && req.body.username == username) {
+        res.render('gameMode')
+    } else {
+        res.send(`<h1>Password or Username Incorrect</h1> 
+        <div class = row>
+        <a class="btn btn-primary" href='/signin' method = "POST" role="button">Sign In Again</a>
+        </div>`)
+    }
+})
 
-// singleplater
+
+// singleplayer
 app.get('/singlePlayer', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'singleplayer.html'))
 })
 
-
-
-
-
-
-app.listen(20000)
+app.listen(4000)
