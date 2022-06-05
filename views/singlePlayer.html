@@ -18,9 +18,21 @@
     <h1>WORDLE</h1>
   </div>
 
-  <div class = row>
-    <a class="btn btn-primary" href='/signin' role="button">GameMode</a>
-</div>
+  <!-- <form action = "/" method = "POST">
+    <div class="row mt-4 text-center justify-content-center">
+      <div class = row>
+          <a class="btn btn-primary" href='/' role="button">GameMode</a>
+      </div>
+    </div>
+  </form> -->
+  <form action = "/" method = "POST">
+    <div class="row mt-4 text-center justify-content-center">
+        <div class = "col-4" >
+            <button class="btn btn-primary">Home</button>
+        </div>
+    </div> 
+</form>
+
 
   <div class="Game">
 
@@ -183,10 +195,15 @@
     <div class="row mt-4 text-center">
       <h1 id="winMsg" class = "text-black display-4" hidden>You Win!</h1><h1 id="loseMsg" class = "text-black display-4" hidden>You Lose :(</h1>
       <div>
-      <button id="backBtn" type="button" class="btn btn-secondary" hidden>Return Home</button>
+      <form action = "/" method = "POST">
+        <div class="row mt-4 text-center justify-content-center">
+            <div class = "col-4" >
+              <button id="backBtn" class="btn btn-secondary" hidden>Return Home</button>
+            </div>
+        </div> 
+      </form>
+      </div>
     </div>
-
-
     <script src="public/singlePlayer.js"></script>
 </body>
 </html>
