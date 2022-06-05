@@ -143,8 +143,6 @@ letterButtons.forEach(button => {
                 }
                 break;
             case 'Home':
-                //TODO code that sends user back to gamemode selection screen -- THis is now done in th JS server -- HP maybe remove
-                // do nothing
                 break;
             default:
                 wordle.appendLetter(button.innerText);
