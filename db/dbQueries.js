@@ -33,8 +33,20 @@ async function getAllUserInfo () {
   }
 }
 
+async function addUserInfo (username, password) {
+  try {
+    const pool = await db.sql.connect(db.config)
+    const product = await pool.request()
+      .query("INSERT INTO [dbo].[Player] (UserName, Password) VALUES ('"+ username + "', '" + password +"');")
+    return product
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   getRandomWord,
   getAllWords,
-  getAllUserInfo
+  getAllUserInfo,
+  addUserInfo
 }

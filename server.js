@@ -25,6 +25,7 @@ dataQuery.getAllUserInfo()
     })
   })
 
+
 // adding the path to public
 app.use('/public', express.static('./public/'))
 
