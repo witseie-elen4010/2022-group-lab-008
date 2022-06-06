@@ -57,7 +57,7 @@ class Wordle {
         const letterId = this.newWord[i]
         const letterBtn = document.getElementById(letterId)
         if (letterBtn.style.backgroundColor !== 'rgb(0, 128, 0)' && letterBtn.style.backgroundColor !== 'rgb(177, 185, 53)') {
-          letterBtn.style.backgroundColor = 'Black'
+          letterBtn.style.backgroundColor = 'rgb(105, 105, 105)'
         }
         for (let j = 0; j < this.newWord.length; j++) {
           if (this.newWord[j] === this.guessWord[i]) {
@@ -67,14 +67,13 @@ class Wordle {
             if(cell.style.backgroundColor != 'rgb(0, 128, 0)'){
               cell.style.backgroundColor = 'rgb(177, 185, 53)'
             }
-            
 
             const letterId = this.guessWord[i]
             const letterBtn = document.getElementById(letterId)
             console.log(letterBtn.style.backgroundColor)
             if (letterBtn.style.backgroundColor !== 'rgb(0, 128, 0)') { letterBtn.style.backgroundColor = 'rgb(177, 185, 53)' }
             break
-          }
+          } 
         }
         if (this.newWord[i] === this.guessWord[i]) {
           const index = i + 1
@@ -86,6 +85,15 @@ class Wordle {
           const letterBtn = document.getElementById(letterId)
           letterBtn.style.backgroundColor = 'rgb(0, 128, 0)'
         }
+        for(let j = 0; j < this.newWord.length; j++){
+          const index = j + 1
+          const colId = '#col' + index
+          const cell = row.querySelector(colId)
+          if(cell.style.backgroundColor != 'rgb(0, 128, 0)' && cell.style.backgroundColor != 'rgb(177, 185, 53)'){
+            cell.style.backgroundColor = 'rgb(105, 105, 105)'
+          }
+        }
+        
       }
     }
   }
