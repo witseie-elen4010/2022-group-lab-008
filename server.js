@@ -2,7 +2,12 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const dataQuery = require('./db/dbQueries')
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 const wordlist = []
+const usernames = []
+const passwords = []
+let singlePlayerWord = ''
 
 // add list of words to server
 dataQuery.getAllWords()
@@ -12,8 +17,13 @@ dataQuery.getAllWords()
     })
   })
 
-const password = 'b'
-const username = 'a'
+dataQuery.getAllUserInfo()
+  .then(result => {
+    result[0].forEach(element => {
+      usernames.push(element.UserName)
+      passwords.push(element.Password)
+    })
+  })
 
 // adding the path to public
 app.use('/public', express.static('./public/'))
@@ -39,13 +49,23 @@ app.get('/register', (req, res) => {
 
 // AfterLogin
 app.post('/', (req, res) => {
-  if (req.body.password === password && req.body.username === username) {
-    res.render('gameMode')
-  } else {
-    res.send(`<h1>Password or Username Incorrect</h1> 
+  if (!usernames.includes(req.body.username)) {
+    res.send(`<h1>Username Incorrect</h1> 
         <div class = row>
         <a class="btn btn-primary" href='/signin' method = "POST" role="button">Sign In Again</a>
         </div>`)
+    return
+  }
+  const index = usernames.indexOf(req.body.username)
+  if (passwords[index] === req.body.password) {
+    res.render('gameMode')
+  }
+  else {
+    res.send(`<h1>Password Incorrect</h1> 
+        <div class = row>
+        <a class="btn btn-primary" href='/signin' method = "POST" role="button">Sign In Again</a>
+        </div>`)
+    return
   }
 })
 
@@ -53,15 +73,15 @@ app.post('/', (req, res) => {
 app.get('/singlePlayer', (req, res) => {
   dataQuery.getRandomWord()
     .then(result => {
-      console.log(result[0][0].Word)
-      res.render('./singlePlayer', { word: result[0][0].Word })
+      singlePlayerWord = result[0][0].Word
+      console.log(singlePlayerWord)
+      res.render('./singlePlayer', { word: singlePlayerWord })
     })
 })
 
-// singleplayer
-app.get('/singlePlayer/test', (req, res) => {
-
-})
+app.post("/check", async (req, res) => {
+  res.json({ truth: wordlist.includes(req.body.word) })
+});
 
 // multiplayer
 app.get('/multiplayer', (req, res) => {

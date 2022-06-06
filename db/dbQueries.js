@@ -22,7 +22,19 @@ async function getAllWords () {
   }
 }
 
+async function getAllUserInfo () {
+  try {
+    const pool = await db.sql.connect(db.config)
+    const product = await pool.request()
+      .query('SELECT UserName, Password FROM [dbo].[Player]')
+    return product.recordsets
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   getRandomWord,
-  getAllWords
+  getAllWords,
+  getAllUserInfo
 }
