@@ -48,6 +48,22 @@ app.get('/register', (req, res) => {
   res.render('signUp')
 })
 
+app.get('/registerComplete', (req, res) => {
+  res.render('welcome')
+})
+
+app.post('/validateUsername',  (req, res) => {
+  usernameIsAvailable = !usernames.includes(req.body.username)
+  username = req.body.username
+  password = req.body.password
+  if (usernameIsAvailable) {
+    dataQuery.addUserInfo(username, password)
+    usernames.push(username)
+    passwords.push(password)
+  }
+  res.json({ truth:  usernameIsAvailable})
+})
+
 // AfterLogin
 app.post('/', (req, res) => {
   if (!usernames.includes(req.body.username)) {
