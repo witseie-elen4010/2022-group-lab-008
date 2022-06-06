@@ -1,13 +1,13 @@
 // Creating a Wordle class
 class Wordle {
-  constructor (guessWord = '') {
+  constructor(guessWord = '') {
     this.newWord = ''
     this.guessNumber = 1
     this.guessWord = guessWord
     this.win = null
   }
 
-  gameResult () {
+  gameResult() {
     if (this.guessWord === this.newWord) {
       // alert('Well Done You Win !!!')
       this.win = true
@@ -19,12 +19,12 @@ class Wordle {
     }
   }
 
-  deleteLetter () {
+  deleteLetter() {
     // simply pop from string
     this.newWord = this.newWord.substring(0, this.newWord.length - 1)
   }
 
-  appendLetter (letter) {
+  appendLetter(letter) {
     // added in functionality such that words can't be longer than five words
     if (this.newWord.length < 5 && this.win == null) {
       this.newWord = this.newWord + letter
@@ -33,7 +33,7 @@ class Wordle {
     }
   }
 
-  enterWord () {
+  enterWord() {
     // have to check size of word
     if (this.newWord.length < 5) {
       // alert("Word Too short")
@@ -45,7 +45,7 @@ class Wordle {
     }
   }
 
-  colourWord () {
+  colourWord() {
     if (this.newWord.length < 5) {
       // alert("Word Too short")
     } else {
@@ -70,7 +70,7 @@ class Wordle {
 
             const letterId = this.guessWord[i]
             const letterBtn = document.getElementById(letterId)
-            console.log(letterBtn.style.backgroundColor)
+            //console.log(letterBtn.style.backgroundColor)
             if (letterBtn.style.backgroundColor !== 'rgb(0, 128, 0)') { letterBtn.style.backgroundColor = 'rgb(177, 185, 53)' }
             break
           } 
@@ -98,7 +98,7 @@ class Wordle {
     }
   }
 
-  updateGrid () {
+  updateGrid() {
     const rowId = '#row' + this.guessNumber
     const row = document.querySelector(rowId)
 
@@ -138,18 +138,37 @@ letterButtons.forEach(button => {
         wordle.updateGrid()
         break
       case 'ENTER':
-
-        wordle.colourWord()
-        wordle.enterWord()
-        if (wordle.win != null) {
-          backBtn.removeAttribute('hidden')
-          if (wordle.win === true) {
-            winMsg.removeAttribute('hidden')
-          }
-          if (wordle.win === false) {
-            loseMSg.removeAttribute('hidden')
-          }
-        }
+        fetch('/check', {
+          method: 'POST',
+          headers: {
+            Authorization: 'wordcheck',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            word: wordle.newWord.toLowerCase()
+          }),
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            if (data.truth) {
+              wordle.colourWord()
+              wordle.enterWord()
+              if (wordle.win != null) {
+                backBtn.removeAttribute('hidden')
+                if (wordle.win === true) {
+                  winMsg.removeAttribute('hidden')
+                }
+                if (wordle.win === false) {
+                  loseMSg.removeAttribute('hidden')
+                }
+              }
+            }
+            else {
+              alert('Not a word')
+            }
+          });
         break
       case 'Return Home':
         // TODO code that sends user back to gamemode selection screen

@@ -22,7 +22,31 @@ async function getAllWords () {
   }
 }
 
+async function getAllUserInfo () {
+  try {
+    const pool = await db.sql.connect(db.config)
+    const product = await pool.request()
+      .query('SELECT UserName, Password FROM [dbo].[Player]')
+    return product.recordsets
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function addUserInfo (username, password) {
+  try {
+    const pool = await db.sql.connect(db.config)
+    const product = await pool.request()
+      .query("INSERT INTO [dbo].[Player] (UserName, Password) VALUES ('"+ username + "', '" + password +"');")
+    return product
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   getRandomWord,
-  getAllWords
+  getAllWords,
+  getAllUserInfo,
+  addUserInfo
 }
