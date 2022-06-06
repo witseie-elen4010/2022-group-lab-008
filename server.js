@@ -4,6 +4,7 @@ const path = require('path')
 
 const password = 'b'
 const username = 'a'
+signedIn = false
 
 // adding the path to public
 app.use('/public', express.static('./public/'))
@@ -29,10 +30,14 @@ app.get('/register', (req, res) => {
 
 // AfterLogin
 app.post('/', (req, res) => {
-  if (req.body.password === password && req.body.username === username) {
-    res.render('gameMode')
-  } else {
-    res.send(`<h1>Password or Username Incorrect</h1> 
+    if(req.body.password == password && req.body.username == username) {
+        res.render('gameMode')
+        signedIn = true
+    } else if(signedIn == true) {
+        res.render('gameMode')
+    }
+    else {
+        res.send(`<h1>Password or Username Incorrect</h1> 
         <div class = row>
         <a class="btn btn-primary" href='/signin' method = "POST" role="button">Sign In Again</a>
         </div>`)
