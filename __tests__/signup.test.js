@@ -49,7 +49,7 @@ document.body.innerHTML =`
 </body>
 `
 
-const {validatePassword, comparePasswords, validateUsername} = require('../public/signup.js')
+const {validatePassword, comparePasswords} = require('../public/signup.js')
 
 
 describe('Password Validation:', () => {
@@ -58,16 +58,34 @@ describe('Password Validation:', () => {
       expect(validatePassword('av')).toBe(false);
       expect(validatePassword('1234567')).toBe(false);
       expect(validatePassword('123 456')).toBe(false);
-      expect(validatePassword('password')).toBe(true);
+      expect(validatePassword('Password')).toBe(true);
       expect(validatePassword('Thisisalongerpassword')).toBe(true);
     });
 
     test('Password cannot be larger than 99 characters', () => {
-        expect(validatePassword('password')).toBe(true);
+        expect(validatePassword('Password')).toBe(true);
         expect(validatePassword('Thisisalongerpassword')).toBe(true);
-        expect(validatePassword('0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789')).toBe(false);
-        expect(validatePassword('012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678')).toBe(true);
-        expect(validatePassword('01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789')).toBe(false);
+        expect(validatePassword('P123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789')).toBe(false);
+        expect(validatePassword('P12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678')).toBe(true);
+        expect(validatePassword('P1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789')).toBe(false);
+      });
+  });
+
+  describe('Password Comparison:', () => {
+    test('Two equal passwords are the same', () => {
+      expect(comparePasswords('Password','Password')).toBe(true);
+      expect(comparePasswords('Thisisalongerpassword', 'Thisisalongerpassword')).toBe(true);
+      expect(comparePasswords('1234567','1234567')).toBe(true);
+      expect(comparePasswords('123 456','123 456')).toBe(true);
+    });
+
+    test('Two different passwords are not the same', () => {
+        expect(comparePasswords('1234567890','1234567891')).toBe(false);
+        expect(comparePasswords('2234567890','1234567890')).toBe(false);
+        expect(comparePasswords('iamatestpassword','iamatestpasswordalso')).toBe(false);
+        expect(comparePasswords('iamatestpassword','')).toBe(false);
+        expect(comparePasswords('1234567890','iamatestpassword')).toBe(false);
+        expect(comparePasswords('123  456','123 456')).toBe(false);
       });
   });
 
