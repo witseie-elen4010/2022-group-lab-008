@@ -3,8 +3,9 @@ const mssql = require('mssql')
 const config = {
   server: 'elen4010-group08-db.database.windows.net',
   database: 'WordleWithFriends',
-  user: 'group08admin',
-  password: 'Wordle2Nite',
+  //DO NOT CHANGE LEAVE AS REGULAR PASSWORD
+  user: process.env.AzureDBAdmin,
+  password: process.env.AzureDBPassword,
   port: 1433,
   options: {
     encrypt: true,
