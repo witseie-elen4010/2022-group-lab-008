@@ -1,10 +1,19 @@
 const express = require('express')
 const app = express()
 const path = require('path')
+const dataQuery = require('./db/dbQueries')
+const wordlist = []
+
+// add list of words to server
+dataQuery.getAllWords()
+  .then(result => {
+    result[0].forEach(element => {
+      wordlist.push(element.Word)
+    })
+  })
 
 const password = 'b'
 const username = 'a'
-signedIn = false
 
 // adding the path to public
 app.use('/public', express.static('./public/'))
@@ -30,14 +39,10 @@ app.get('/register', (req, res) => {
 
 // AfterLogin
 app.post('/', (req, res) => {
-    if(req.body.password == password && req.body.username == username) {
-        res.render('gameMode')
-        signedIn = true
-    } else if(signedIn == true) {
-        res.render('gameMode')
-    }
-    else {
-        res.send(`<h1>Password or Username Incorrect</h1> 
+  if (req.body.password === password && req.body.username === username) {
+    res.render('gameMode')
+  } else {
+    res.send(`<h1>Password or Username Incorrect</h1> 
         <div class = row>
         <a class="btn btn-primary" href='/signin' method = "POST" role="button">Sign In Again</a>
         </div>`)
@@ -46,35 +51,22 @@ app.post('/', (req, res) => {
 
 // singleplayer
 app.get('/singlePlayer', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'singleplayer.html'))
+  dataQuery.getRandomWord()
+    .then(result => {
+      console.log(result[0][0].Word)
+      res.render('./singlePlayer', { word: result[0][0].Word })
+    })
+})
+
+// singleplayer
+app.get('/singlePlayer/test', (req, res) => {
+
 })
 
 // multiplayer
 app.get('/multiplayer', (req, res) => {
   // sending data in same way
   res.sendFile(path.join(__dirname, 'views', 'multiplayer.html'))
-})
-
-const db = require('./db.js')
-app.get('/database', function (req, res) {
-  // Make a query to the database
-  db.pools
-    // Run query
-    .then((pool) => {
-      return pool.request()
-        // This is only a test query, change it to whatever you need
-        .query('SELECT 1')
-    })
-    // Send back the result
-    .then(result => {
-      res.send(result)
-    })
-    // If there's an error, return that with some description
-    .catch(err => {
-      res.send({
-        Error: err
-      })
-    })
 })
 
 app.listen(process.env.PORT || 3000)
