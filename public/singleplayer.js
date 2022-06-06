@@ -64,7 +64,10 @@ class Wordle {
             const index = j + 1
             const colId = '#col' + index
             const cell = row.querySelector(colId)
-            cell.style.backgroundColor = 'rgb(177, 185, 53)'
+            if(cell.style.backgroundColor != 'rgb(0, 128, 0)'){
+              cell.style.backgroundColor = 'rgb(177, 185, 53)'
+            }
+            
 
             const letterId = this.guessWord[i]
             const letterBtn = document.getElementById(letterId)
