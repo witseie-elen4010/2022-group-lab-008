@@ -2,6 +2,9 @@ function validatePassword(password) {
     if (password.length < 8) {
         return false
     }
+    if (password.length > 99) {
+        return false
+    }
     return true
 }
 
@@ -22,12 +25,12 @@ async function validateUsername(username, password) {
         }),
     })
     const validity = await response.json();
-    return validity;
+    return validity.truth;
 }
 
 function registerComplete(validity) {
-    console.log(validity.truth)
-    if (!validity.truth) {
+    console.log(validity)
+    if (!validity) {
         alert('Username Taken!')
         return
     }
@@ -38,7 +41,7 @@ letterButtons.forEach(button => {
     button.addEventListener('click', () => {
         const password = document.getElementById('password').value
         if (!validatePassword(password)) {
-            alert('Invalid Password. Must contain at least 8 characters!')
+            alert('Invalid Password. Must contain at least 8 and no more than 99 characters!')
             return
         }
         const confirmPassword = document.getElementById('confirmPassword').value
