@@ -102,8 +102,12 @@ app.post("/check", async (req, res) => {
 
 // multiplayer
 app.get('/multiplayer', (req, res) => {
-  // sending data in same way
-  res.sendFile(path.join(__dirname, 'views', 'multiplayer.html'))
+  dataQuery.getRandomWord()
+    .then(result => {
+      singlePlayerWord = result[0][0].Word
+      console.log(singlePlayerWord)
+      res.render('./multiPlayer', { word: singlePlayerWord })
+    })
 })
 
 app.listen(process.env.PORT || 3000)

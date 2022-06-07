@@ -1,37 +1,53 @@
 // Creating a Wordle class
 class Wordle {
-  constructor () {
+  constructor(guessWord = '') {
     this.newWord = ''
     this.guessNumber = 1
-    this.guessWord = 'SUPER'
+    this.oppNewWord = 'CRANE'
+    this.oppGuessNumber = 1
+    this.guessWord = guessWord
+    this.win = null
   }
 
-  deleteLetter () {
+  gameResult() {
+    if (this.guessWord === this.newWord) {
+      // alert('Well Done You Win !!!')
+      this.win = true
+      // console.log("YOU WIN!")
+    }
+    if (this.guessNumber === 6 & this.guessWord !== this.newWord) {
+      // alert("You Have lost The Game :(")
+      this.win = false
+    }
+  }
+
+  deleteLetter() {
     // simply pop from string
     this.newWord = this.newWord.substring(0, this.newWord.length - 1)
   }
 
-  appendLetter (letter) {
+  appendLetter(letter) {
     // added in functionality such that words can't be longer than five words
-    if (this.newWord.length < 5) {
+    if (this.newWord.length < 5 && this.win == null) {
       this.newWord = this.newWord + letter
     } else {
       // alert("Word Too Long")
     }
   }
 
-  enterWord () {
+  enterWord() {
     // have to check size of word
     if (this.newWord.length < 5) {
       // alert("Word Too short")
     } else {
       // Updating the guessNumber
+      this.gameResult()
       this.guessNumber = this.guessNumber + 1
       this.newWord = ''
     }
   }
 
-  colourWord () {
+  colourWord() {
     if (this.newWord.length < 5) {
       // alert("Word Too short")
     } else {
@@ -40,26 +56,92 @@ class Wordle {
       const row = document.querySelector(rowId)
       // changing colour to green and yellow - one loop
       for (let i = 0; i < this.newWord.length; i++) {
+        const letterId = this.newWord[i]
+        const letterBtn = document.getElementById(letterId)
+        if (letterBtn.style.backgroundColor !== 'rgb(0, 128, 0)' && letterBtn.style.backgroundColor !== 'rgb(177, 185, 53)') {
+          letterBtn.style.backgroundColor = 'rgb(105, 105, 105)'
+        }
         for (let j = 0; j < this.newWord.length; j++) {
           if (this.newWord[j] === this.guessWord[i]) {
             const index = j + 1
             const colId = '#col' + index
             const cell = row.querySelector(colId)
-            cell.style.backgroundColor = '#b1b935'
+            if(cell.style.backgroundColor != 'rgb(0, 128, 0)'){
+              cell.style.backgroundColor = 'rgb(177, 185, 53)'
+            }
+
+            const letterId = this.guessWord[i]
+            const letterBtn = document.getElementById(letterId)
+            //console.log(letterBtn.style.backgroundColor)
+            if (letterBtn.style.backgroundColor !== 'rgb(0, 128, 0)') { letterBtn.style.backgroundColor = 'rgb(177, 185, 53)' }
             break
-          }
+          } 
         }
         if (this.newWord[i] === this.guessWord[i]) {
           const index = i + 1
           const colId = '#col' + index
           const cell = row.querySelector(colId)
-          cell.style.backgroundColor = 'Green'
+          cell.style.backgroundColor = 'rgb(0, 128, 0)'
+
+          const letterId = this.guessWord[i]
+          const letterBtn = document.getElementById(letterId)
+          letterBtn.style.backgroundColor = 'rgb(0, 128, 0)'
         }
+        for(let j = 0; j < this.newWord.length; j++){
+          const index = j + 1
+          const colId = '#col' + index
+          const cell = row.querySelector(colId)
+          if(cell.style.backgroundColor != 'rgb(0, 128, 0)' && cell.style.backgroundColor != 'rgb(177, 185, 53)'){
+            cell.style.backgroundColor = 'rgb(105, 105, 105)'
+          }
+        }
+        
       }
     }
   }
 
-  updateGrid () {
+
+  oppColourWord() {
+    if (this.newWord.length < 5) {
+      // alert("Word Too short")
+    } else {
+      // change colour of word...
+      const rowId = '#row' + this.oppGuessNumber
+      const row = document.querySelector(rowId)
+      // changing colour to green and yellow - one loop
+      for (let i = 0; i < this.oppNewWord.length; i++) {
+        const letterId = this.oppNewWord[i]
+
+        for (let j = 0; j < this.oppNewWord.length; j++) {
+          if (this.oppNewWord[j] === this.guessWord[i]) {
+            const index = j + 7
+            const colId = '#col' + index
+            const cell = row.querySelector(colId)
+            if(cell.style.backgroundColor != 'rgb(0, 128, 0)'){
+              cell.style.backgroundColor = 'rgb(177, 185, 53)'
+            }
+          } 
+        }
+        if (this.oppNewWord[i] === this.guessWord[i]) {
+          const index = i + 7
+          const colId = '#col' + index
+          const cell = row.querySelector(colId)
+          cell.style.backgroundColor = 'rgb(0, 128, 0)'
+        }
+        for(let j = 0; j < this.oppNewWord.length; j++){
+          const index = j + 7
+          const colId = '#col' + index
+          const cell = row.querySelector(colId)
+          if(cell.style.backgroundColor != 'rgb(0, 128, 0)' && cell.style.backgroundColor != 'rgb(177, 185, 53)'){
+            cell.style.backgroundColor = 'rgb(105, 105, 105)'
+          }
+        }
+        
+      }
+    }
+  }
+
+  updateGrid() {
     const rowId = '#row' + this.guessNumber
     const row = document.querySelector(rowId)
 
@@ -78,14 +160,18 @@ class Wordle {
   }
 }
 
-const wordle = new Wordle()
+// Aquire word from .ejs file and server
+const test = document.getElementsByClassName('wordVal')
+const testValue = test[0].dataset.testValue
+const wordle = new Wordle(testValue.replace(/['"]+/g, '').toUpperCase())
 
-let backBtn = document.getElementById("backBtn");
-//backBtn.setAttribute("hidden", "hidden");
-let winMsg = document.getElementById("winMsg");
-//winMsg.setAttribute("hidden","hidden");
-let loseMSg = document.getElementById("loseMsg");
-//loseMSg.setAttribute("hidden", "hidden");
+const backBtn = document.getElementById('backBtn')
+// backBtn.setAttribute("hidden", "hidden");
+const winMsg = document.getElementById('winMsg')
+// winMsg.setAttribute("hidden","hidden");
+const loseMSg = document.getElementById('loseMsg')
+// loseMSg.setAttribute("hidden", "hidden");
+
 
 const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {
@@ -96,9 +182,42 @@ letterButtons.forEach(button => {
         wordle.updateGrid()
         break
       case 'ENTER':
-        wordle.colourWord()
-        wordle.enterWord()
-
+        // just a test. 
+        wordle.oppColourWord()
+        fetch('/check', {
+          method: 'POST',
+          headers: {
+            Authorization: 'wordcheck',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            word: wordle.newWord.toLowerCase()
+          }),
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            if (data.truth) {
+              wordle.colourWord()
+              wordle.enterWord()
+              if (wordle.win != null) {
+                backBtn.removeAttribute('hidden')
+                if (wordle.win === true) {
+                  winMsg.removeAttribute('hidden')
+                }
+                if (wordle.win === false) {
+                  loseMSg.removeAttribute('hidden')
+                }
+              }
+            }
+            else {
+              alert('Not a word')
+            }
+          });
+        break
+      case 'Return Home':
+        // TODO code that sends user back to gamemode selection screen
         break
       default:
         wordle.appendLetter(button.innerText)
@@ -106,3 +225,5 @@ letterButtons.forEach(button => {
     }
   })
 })
+
+module.exports = { Wordle }
