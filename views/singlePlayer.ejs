@@ -18,9 +18,14 @@
     <h1>WORDLE</h1>
   </div>
 
-  <div class = row>
-    <a class="btn btn-primary" href='/signin' role="button">GameMode</a>
-</div>
+  <form action = "/" method = "POST">
+    <div class="row mt-4 text-center justify-content-center">
+        <div class = "col-4" >
+            <button class="btn btn-primary">Home</button>
+        </div>
+    </div> 
+</form>
+
 
   <div class="Game">
 
@@ -133,16 +138,16 @@
       <div  class="row text-center justify-content-center">
         <div class="col">
           <div class="btn-group me-2" role="group" aria-label="First group">
-            <button id="Q" type="button" class="btn btn-secondary">Q</button>
-            <button id="W" type="button" class="btn btn-secondary">W</button>
-            <button id="E" type="button" class="btn btn-secondary">E</button>
-            <button id="R" type="button" class="btn btn-secondary">R</button>
-            <button id="T" type="button" class="btn btn-secondary">T</button>
-            <button id="Y" type="button" class="btn btn-secondary">Y</button>
-            <button id="U" type="button" class="btn btn-secondary">U</button>
-            <button id="I" type="button" class="btn btn-secondary">I</button>
-            <button id="O" type="button" class="btn btn-secondary">O</button>
-            <button id="P" type="button" class="btn btn-secondary">P</button>
+            <button id="Q" type="button" class="btn btn-light">Q</button>
+            <button id="W" type="button" class="btn btn-light">W</button>
+            <button id="E" type="button" class="btn btn-light">E</button>
+            <button id="R" type="button" class="btn btn-light">R</button>
+            <button id="T" type="button" class="btn btn-light">T</button>
+            <button id="Y" type="button" class="btn btn-light">Y</button>
+            <button id="U" type="button" class="btn btn-light">U</button>
+            <button id="I" type="button" class="btn btn-light">I</button>
+            <button id="O" type="button" class="btn btn-light">O</button>
+            <button id="P" type="button" class="btn btn-light">P</button>
           </div>
         </div>
       <!-- so here is where we add out identifiers -->
@@ -150,30 +155,30 @@
       <div class="row text-center justify-content-center">
         <div class="col">
           <div class="btn-group me-2" role="group" aria-label="First group">
-            <button id="A" type="button" class="btn btn-secondary">A</button>
-            <button id="S" type="button" class="btn btn-secondary">S</button>
-            <button id="D" type="button" class="btn btn-secondary">D</button>
-            <button id="F" type="button" class="btn btn-secondary">F</button>
-            <button id="G" type="button" class="btn btn-secondary">G</button>
-            <button id="H" type="button" class="btn btn-secondary">H</button>
-            <button id="J" type="button" class="btn btn-secondary">J</button>
-            <button id="K" type="button" class="btn btn-secondary">K</button>
-            <button id="L" type="button" class="btn btn-secondary">L</button>
+            <button id="A" type="button" class="btn btn-light">A</button>
+            <button id="S" type="button" class="btn btn-light">S</button>
+            <button id="D" type="button" class="btn btn-light">D</button>
+            <button id="F" type="button" class="btn btn-light">F</button>
+            <button id="G" type="button" class="btn btn-light">G</button>
+            <button id="H" type="button" class="btn btn-light">H</button>
+            <button id="J" type="button" class="btn btn-light">J</button>
+            <button id="K" type="button" class="btn btn-light">K</button>
+            <button id="L" type="button" class="btn btn-light">L</button>
           </div>
         </div>
       </div>
       <div class="row text-center justify-content-center">
         <div class="col">
           <div class="btn-group me-2" role="group" aria-label="First group">
-            <button type="button" class="btn btn-secondary">ENTER</button>
-            <button id="Z" type="button" class="btn btn-secondary">Z</button>
-            <button id="X" type="button" class="btn btn-secondary">X</button>
-            <button id="C" type="button" class="btn btn-secondary">C</button>
-            <button id="V" type="button" class="btn btn-secondary">V</button>
-            <button id="B" type="button" class="btn btn-secondary">B</button>
-            <button id="N" type="button" class="btn btn-secondary">N</button>
-            <button id="M" type="button" class="btn btn-secondary">M</button>
-            <button type="button" class="btn btn-secondary">DEL</button>
+            <button type="button" class="btn btn-light">ENTER</button>
+            <button id="Z" type="button" class="btn btn-light">Z</button>
+            <button id="X" type="button" class="btn btn-light">X</button>
+            <button id="C" type="button" class="btn btn-light">C</button>
+            <button id="V" type="button" class="btn btn-light">V</button>
+            <button id="B" type="button" class="btn btn-light">B</button>
+            <button id="N" type="button" class="btn btn-light">N</button>
+            <button id="M" type="button" class="btn btn-light">M</button>
+            <button type="button" class="btn btn-light">DEL</button>
           </div>
         </div>
       </div>
@@ -183,10 +188,16 @@
     <div class="row mt-4 text-center">
       <h1 id="winMsg" class = "text-black display-4" hidden>You Win!</h1><h1 id="loseMsg" class = "text-black display-4" hidden>You Lose :(</h1>
       <div>
-      <button id="backBtn" type="button" class="btn btn-secondary" hidden>Return Home</button>
+      <form action = "/" method = "POST">
+        <div class="row mt-4 text-center justify-content-center">
+            <div class = "col-4" >
+              <button id="backBtn" class="btn btn-secondary" hidden>Return Home</button>
+            </div>
+        </div> 
+      </form>
+      </div>
     </div>
-
-
-    <script src="public/singlePlayer.js"></script>
+    <div class='wordVal' data-test-value='<%= JSON.stringify(word) %>'></div>
+    <script type="module" src="public/singleplayer.js"></script>
 </body>
 </html>
