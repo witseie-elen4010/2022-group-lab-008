@@ -2,12 +2,15 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const dataQuery = require('./db/dbQueries')
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-app.use(bodyParser.json());
+const bcrypt = require('bcryptjs')
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 const wordlist = []
 const usernames = []
 const passwords = []
+const logs = []
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 app.set('views', './views')
@@ -18,7 +21,7 @@ let singlePlayerWord = ''
 
 const rooms = { Lobby1: {}, Lobby2: {} }
 
-// 
+//
 // add list of words to server
 dataQuery.getAllWords()
   .then(result => {
@@ -35,8 +38,15 @@ dataQuery.getAllUserInfo()
     })
   })
 
-//Allowing use of cookies
-app.use(cookieParser());
+dataQuery.getAllPlayerLog()
+  .then(result => {
+    result[0].forEach(element => {
+      logs.push(element)
+    })
+  })
+
+// Allowing use of cookies
+app.use(cookieParser())
 
 // adding the path to public
 app.use('/public', express.static('./public/'))
@@ -49,6 +59,8 @@ app.set('view engine', 'ejs')
 
 // Home Page
 app.get('/', (req, res) => {
+  res.clearCookie('usernameCookie')
+  res.clearCookie('passwordCookie')
   res.render('welcome')
 })
 
@@ -64,22 +76,26 @@ app.get('/registerComplete', (req, res) => {
   res.render('welcome')
 })
 
-app.post('/validateUsername',  (req, res) => {
-  usernameIsAvailable = !usernames.includes(req.body.username)
-  username = req.body.username
-  password = req.body.password
-  if (usernameIsAvailable) {
-    dataQuery.addUserInfo(username, password)
-    usernames.push(username)
-    passwords.push(password)
+app.post('/validateUsername', async (req, res) => {
+  try {
+    const usernameIsAvailable = !usernames.includes(req.body.username)
+    const username = req.body.username
+    const password = req.body.password
+    if (usernameIsAvailable) {
+      const hash = await bcrypt.hash(password, 10)
+      dataQuery.addUserInfo(username, hash)
+      usernames.push(username)
+      passwords.push(hash)
+    }
+    res.json({ truth: usernameIsAvailable })
+  } catch (error) {
+    console.log('Error: ' + error)
   }
-  res.json({ truth:  usernameIsAvailable})
 })
 
 // AfterLogin
 app.post('/', (req, res) => {
-  if (usernames.includes(req.cookies.usernameCookie))
-  {
+  if (usernames.includes(req.cookies.usernameCookie)) {
     res.render('gameMode')
     return
   }
@@ -91,17 +107,16 @@ app.post('/', (req, res) => {
     return
   }
   const index = usernames.indexOf(req.body.username)
-  if (passwords[index] === req.body.password) {
-    res.cookie(`usernameCookie`,req.body.username);
-    res.cookie(`passwordCookie`,req.body.password);
+  const verified = bcrypt.compareSync(req.body.password, passwords[index])
+  if (verified) {
+    res.cookie('usernameCookie', req.body.username)
+    res.cookie('passwordCookie', passwords[index])
     res.render('gameMode')
-  }
-  else {
+  } else {
     res.send(`<h1>Password Incorrect</h1> 
         <div class = row>
         <a class="btn btn-primary" href='/signin' method = "POST" role="button">Sign In Again</a>
         </div>`)
-    return
   }
 })
 
@@ -115,12 +130,16 @@ app.get('/singlePlayer', (req, res) => {
     })
 })
 
-app.post("/check", async (req, res) => {
+app.post('/check', async (req, res) => {
   res.json({ truth: wordlist.includes(req.body.word) })
-});
+})
 
 app.get('/lobby', (req, res) => {
-  res.render('lobby', { rooms: rooms })
+  res.render('lobby', { rooms })
+})
+
+app.get('/getLogs', (req, res) => {
+  res.render('logs', { logs })
 })
 
 app.get('/hangLobby', (req, res) => {
@@ -134,11 +153,11 @@ app.get('/hangman', (req, res) => {
 // multiplayer
 app.get('/:Multiplayer', (req, res) => {
   dataQuery.getRandomWord()
-  .then(result => {
-    singlePlayerWord = result[0][0].Word
-    console.log(singlePlayerWord)
-    res.render('multiPlayer', {  roomName: req.params.room, word: singlePlayerWord })
-  })
+    .then(result => {
+      singlePlayerWord = result[0][0].Word
+      console.log(singlePlayerWord)
+      res.render('multiPlayer', { roomName: req.params.room, word: singlePlayerWord })
+    })
 })
 
 server.listen(process.env.PORT || 3000)
@@ -147,10 +166,10 @@ const users = {}
 io.on('connection', socket => {
   socket.on('new-user', data => {
     users[socket.id] = data.name
-    socket.broadcast.emit('user-connected', { name: data.name, word: data.word } )
+    socket.broadcast.emit('user-connected', { name: data.name, word: data.word })
   })
   socket.on('send-chat-message', message => {
-    socket.broadcast.emit('chat-message', { message: message, name: users[socket.id] })
+    socket.broadcast.emit('chat-message', { message, name: users[socket.id] })
   })
   socket.on('send-word', message => {
     socket.broadcast.emit('incoming-word', { message: message.message, guess: message.guess })
@@ -158,6 +177,4 @@ io.on('connection', socket => {
   socket.on('admin-word', message => {
     socket.broadcast.emit('incoming-admin-word', { message: message })
   })
-
-
 })

@@ -14,19 +14,8 @@
 </head>
 <body>
     <table>
-        <thead>
-          <th>id</th>
-          <th>name</th>
-        </thead>
-        <tbody id="place-here"></tbody>
-      </table>
-      <script>
-        $.get('/getData', {}, function(result) {
-          let res = '';
-          result.forEach(data => {
-            res += `<tr><td>${data.id}</td><td>${data.something}</td></tr>`
-          })
-          $('#place-here').html(res)
-        });
-      </script>
+        <tbody id="data"></tbody>
+    </table>
+      <div class='wordVal' data-test-value='<%= JSON.stringify(logs)%>'></div>
+      <script src="../public/logs.js"></script>
 </body>
