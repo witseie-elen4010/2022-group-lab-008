@@ -28,6 +28,9 @@
     <div class = "col-2">
       <a class="btn btn-primary" href='/hangLobby' method = "POST" role="button">Hangman</a>
     </div> 
+    <div class = "col-2">
+      <a class="btn btn-primary" href='/singleplayer' method = "POST" role="button">LOGS</a>
+    </div>
     <%if(locals.usernameCookie){%>
       <p>You are logged in as <%=usernameCookie%></p>
       <a href="/logout">Logout</a>
