@@ -5,8 +5,10 @@ const config = {
   database: 'WordleWithFriends',
 
 
-  user: process.env.AzureDBAdmin,
-  password: process.env.AzureDBPassword,
+  //user: process.env.AzureDBAdmin,
+  //password: process.env.AzureDBPassword,
+  user: 'group08admin',
+  password: 'Wordle2Nite',
   port: 1433,
   options: {
     encrypt: true,
