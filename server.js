@@ -18,6 +18,7 @@ let singlePlayerWord = ''
 
 const rooms = { Lobby1: {}, Lobby2: {} }
 
+// 
 // add list of words to server
 dataQuery.getAllWords()
   .then(result => {
