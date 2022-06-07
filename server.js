@@ -78,9 +78,9 @@ app.get('/registerComplete', (req, res) => {
 
 app.post('/validateUsername', async (req, res) => {
   try {
-    usernameIsAvailable = !usernames.includes(req.body.username)
-    username = req.body.username
-    password = req.body.password
+    const usernameIsAvailable = !usernames.includes(req.body.username)
+    const username = req.body.username
+    const password = req.body.password
     if (usernameIsAvailable) {
       const hash = await bcrypt.hash(password, 10)
       dataQuery.addUserInfo(username, hash)
@@ -95,6 +95,10 @@ app.post('/validateUsername', async (req, res) => {
 
 // AfterLogin
 app.post('/', (req, res) => {
+  if (usernames.includes(req.cookies.usernameCookie)) {
+    res.render('gameMode')
+    return
+  }
   if (!usernames.includes(req.body.username)) {
     res.send(`<h1>Username Incorrect</h1> 
         <div class = row>
