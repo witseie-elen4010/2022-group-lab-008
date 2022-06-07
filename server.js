@@ -8,8 +8,17 @@ app.use(bodyParser.json());
 const wordlist = []
 const usernames = []
 const passwords = []
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
+app.set('views', './views')
+app.set('view engine', 'ejs')
+app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
 let singlePlayerWord = ''
 
+const rooms = { Lobby1: {}, Lobby2: {} }
+
+// 
 // add list of words to server
 dataQuery.getAllWords()
   .then(result => {
@@ -110,10 +119,32 @@ app.post("/check", async (req, res) => {
   res.json({ truth: wordlist.includes(req.body.word) })
 });
 
-// multiplayer
-app.get('/multiplayer', (req, res) => {
-  // sending data in same way
-  res.sendFile(path.join(__dirname, 'views', 'multiplayer.html'))
+app.get('/lobby', (req, res) => {
+  res.render('lobby', { rooms: rooms })
 })
 
-app.listen(process.env.PORT || 3000)
+// multiplayer
+app.get('/:Multiplayer', (req, res) => {
+  dataQuery.getRandomWord()
+  .then(result => {
+    singlePlayerWord = result[0][0].Word
+    console.log(singlePlayerWord)
+    res.render('multiPlayer', {  roomName: req.params.room, word: singlePlayerWord })
+  })
+})
+
+server.listen(process.env.PORT || 3000)
+
+const users = {}
+io.on('connection', socket => {
+  socket.on('new-user', data => {
+    users[socket.id] = data.name
+    socket.broadcast.emit('user-connected', { name: data.name, word: data.word } )
+  })
+  socket.on('send-chat-message', message => {
+    socket.broadcast.emit('chat-message', { message: message, name: users[socket.id] })
+  })
+  socket.on('send-word', message => {
+    socket.broadcast.emit('incoming-word', { message: message.message, guess: message.guess })
+  })
+})
