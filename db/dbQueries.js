@@ -37,7 +37,7 @@ async function addUserInfo (username, password) {
   try {
     const pool = await db.sql.connect(db.config)
     const product = await pool.request()
-      .query("INSERT INTO [dbo].[Player] (UserName, Password) VALUES ('"+ username + "', '" + password +"');")
+      .query("INSERT INTO [dbo].[Player] (UserName, Password) VALUES ('" + username + "', '" + password + "');")
     return product
   } catch (error) {
     console.log(error)
@@ -48,7 +48,7 @@ async function sendLog (playerId, description) {
   try {
     const pool = await db.sql.connect(db.config)
     const product = await pool.request()
-      .query("INSERT INTO [dbo].[logs] (PlayerID, LogTime, LogDescription) ('"+ playerId + "', now(), '" + description +"');")
+      .query("INSERT INTO [dbo].[logs] (PlayerID, LogTime, LogDescription) ('" + playerId + "', now(), '" + description + "');")
     return product
   } catch (error) {
     console.log(error)
@@ -59,7 +59,18 @@ async function getPlayerLog (playerId) {
   try {
     const pool = await db.sql.connect(db.config)
     const product = await pool.request()
-      .query("SELECT * FROM [dbo].[logs] WHERE PlayerID = '"+ playerId + "'")
+      .query("SELECT * FROM [dbo].[logs] WHERE PlayerID = '" + playerId + "'")
+    return product.recordsets
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function getAllPlayerLog () {
+  try {
+    const pool = await db.sql.connect(db.config)
+    const product = await pool.request()
+      .query('SELECT * FROM [dbo].[logs]')
     return product.recordsets
   } catch (error) {
     console.log(error)
@@ -72,5 +83,6 @@ module.exports = {
   getAllUserInfo,
   addUserInfo,
   sendLog,
-  getPlayerLog
+  getPlayerLog,
+  getAllPlayerLog
 }

@@ -1,13 +1,13 @@
 // Creating a Wordle class
 class Wordle {
-  constructor(guessWord = '') {
+  constructor (guessWord = '') {
     this.newWord = ''
     this.guessNumber = 1
     this.guessWord = guessWord
     this.win = null
   }
 
-  gameResult() {
+  gameResult () {
     if (this.guessWord === this.newWord) {
       this.win = true
     }
@@ -16,12 +16,12 @@ class Wordle {
     }
   }
 
-  deleteLetter() {
+  deleteLetter () {
     // simply pop from string
     this.newWord = this.newWord.substring(0, this.newWord.length - 1)
   }
 
-  appendLetter(letter) {
+  appendLetter (letter) {
     // added in functionality such that words can't be longer than five words
     if (this.newWord.length < 5 && this.win == null) {
       this.newWord = this.newWord + letter
@@ -30,7 +30,7 @@ class Wordle {
     }
   }
 
-  enterWord() {
+  enterWord () {
     // have to check size of word
     if (this.newWord.length < 5) {
       // alert("Word Too short")
@@ -42,7 +42,7 @@ class Wordle {
     }
   }
 
-  colourWord() {
+  colourWord () {
     if (this.newWord.length < 5) {
       // alert("Word Too short")
     } else {
@@ -61,7 +61,7 @@ class Wordle {
             const index = j + 1
             const colId = '#col' + index
             const cell = row.querySelector(colId)
-            if(cell.style.backgroundColor != 'rgb(0, 128, 0)'){
+            if (cell.style.backgroundColor !== 'rgb(0, 128, 0)') {
               cell.style.backgroundColor = 'rgb(177, 185, 53)'
             }
 
@@ -69,7 +69,7 @@ class Wordle {
             const letterBtn = document.getElementById(letterId)
             if (letterBtn.style.backgroundColor !== 'rgb(0, 128, 0)') { letterBtn.style.backgroundColor = 'rgb(177, 185, 53)' }
             break
-          } 
+          }
         }
         if (this.newWord[i] === this.guessWord[i]) {
           const index = i + 1
@@ -81,20 +81,19 @@ class Wordle {
           const letterBtn = document.getElementById(letterId)
           letterBtn.style.backgroundColor = 'rgb(0, 128, 0)'
         }
-        for(let j = 0; j < this.newWord.length; j++){
+        for (let j = 0; j < this.newWord.length; j++) {
           const index = j + 1
           const colId = '#col' + index
           const cell = row.querySelector(colId)
-          if(cell.style.backgroundColor != 'rgb(0, 128, 0)' && cell.style.backgroundColor != 'rgb(177, 185, 53)'){
+          if (cell.style.backgroundColor !== 'rgb(0, 128, 0)' && cell.style.backgroundColor !== 'rgb(177, 185, 53)') {
             cell.style.backgroundColor = 'rgb(105, 105, 105)'
           }
         }
-        
       }
     }
   }
 
-  updateGrid() {
+  updateGrid () {
     const rowId = '#row' + this.guessNumber
     const row = document.querySelector(rowId)
 
@@ -131,44 +130,42 @@ letterButtons.forEach(button => {
         wordle.updateGrid()
         break
       case 'ENTER':
-        if(wordle.win == null){
-        fetch('/check', {
-          method: 'POST',
-          headers: {
-            Authorization: 'wordcheck',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            word: wordle.newWord.toLowerCase()
-          }),
-        })
-          .then((res) => {
-            return res.json();
+        if (wordle.win == null) {
+          fetch('/check', {
+            method: 'POST',
+            headers: {
+              Authorization: 'wordcheck',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              word: wordle.newWord.toLowerCase()
+            })
           })
-          .then((data) => {
-            if (data.truth) {
-              wordle.colourWord()
-              wordle.enterWord()
-              if (wordle.win != null) {
-                backBtn.removeAttribute('hidden')
-                if (wordle.win === true) {
-                  winMsg.removeAttribute('hidden')
+            .then((res) => {
+              return res.json()
+            })
+            .then((data) => {
+              if (data.truth) {
+                wordle.colourWord()
+                wordle.enterWord()
+                if (wordle.win != null) {
+                  backBtn.removeAttribute('hidden')
+                  if (wordle.win === true) {
+                    winMsg.removeAttribute('hidden')
+                  }
+                  if (wordle.win === false) {
+                    loseMSg.removeAttribute('hidden')
+                  }
                 }
-                if (wordle.win === false) {
-                  loseMSg.removeAttribute('hidden')
-                }
+              } else {
+                alert('Not a word')
               }
-            }
-            else {
-              alert('Not a word')
-            }
-          });
+            })
         }
         break
       case 'Return Home':
-        
+        break
       case 'Home':
-
         break
       default:
         wordle.appendLetter(button.innerText)
