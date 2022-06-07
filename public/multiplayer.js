@@ -212,12 +212,10 @@ socket.on('incoming-word', word => {
   wordle.oppNewWord = word.message
   wordle.oppGuessNumber = word.guess
   wordle.oppColourWord()
-  appendMessage(wordle.oppNewWord)
 })
 
 socket.on('user-connected', data => {
   appendMessage(`${data.name} connected: GuessWord updated.`)
- 
   wordle.guessWord = data.word
 })
 
@@ -284,7 +282,6 @@ letterButtons.forEach(button => {
     }
   })
 })
-
 
 
 // module.exports = { Wordle }
