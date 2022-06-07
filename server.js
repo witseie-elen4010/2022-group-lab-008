@@ -71,7 +71,6 @@ app.post('/validateUsername',  (req, res) => {
 app.post('/', (req, res) => {
   if (usernames.includes(req.cookies.usernameCookie))
   {
-    console.log('Working')
     res.render('gameMode')
     return
   }

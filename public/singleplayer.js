@@ -138,6 +138,7 @@ letterButtons.forEach(button => {
         wordle.updateGrid()
         break
       case 'ENTER':
+        if(wordle.win == null){
         fetch('/check', {
           method: 'POST',
           headers: {
@@ -169,9 +170,12 @@ letterButtons.forEach(button => {
               alert('Not a word')
             }
           });
+        }
         break
       case 'Return Home':
-        // TODO code that sends user back to gamemode selection screen
+        
+      case 'Home':
+
         break
       default:
         wordle.appendLetter(button.innerText)

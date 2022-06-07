@@ -4,13 +4,15 @@ const config = {
   server: 'elen4010-group08-db.database.windows.net',
   database: 'WordleWithFriends',
   //DO NOT CHANGE LEAVE AS REGULAR PASSWORD
-  user: process.env.AzureDBAdmin,
-  password: process.env.AzureDBPassword,
+  user: 'group08admin',
+  password: 'Wordle2Nite',
+  // user: process.env.AzureDBAdmin,
+  // password: process.env.AzureDBPassword,
   port: 1433,
   options: {
     encrypt: true,
     enableArithAbort: true
-  },
+  }, 
   pool: {
     max: 10,
     min: 0,
