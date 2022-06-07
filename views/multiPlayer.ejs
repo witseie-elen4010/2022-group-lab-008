@@ -10,14 +10,13 @@
     <!-- This is where the css code is stored -->
     <link rel="stylesheet"/>
     <!-- Adding the JavaScript file -->
-
+    <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script defer src="multiplayer.js"></script>
 </head>
 <body>
-  
   <div class="text-center">
     <h1>WORDLE</h1>
   </div>
-
   <form action = "/" method = "POST">
     <div class="row mt-4 text-center justify-content-center">
         <div class = "col-4" >
@@ -25,8 +24,6 @@
         </div>
     </div> 
 </form>
-
-
   <div class="Game">
 
     <div id="GuessGridPlayer" class="Guess Grid mt-5">
@@ -292,7 +289,6 @@
       </div>
     </div>
 
-
     <div class="row mt-4 text-center">
       <h1 id="winMsg" class = "text-black display-4" hidden>You Win!</h1><h1 id="loseMsg" class = "text-black display-4" hidden>You Lose :(</h1>
       <div>
@@ -306,6 +302,26 @@
       </div>
     </div>
     <div class='wordVal' data-test-value='<%= JSON.stringify(word) %>'></div>
-    <script type="module" src="public/multiplayer.js"></script>
+
+    <div  class="row text-center justify-content-center">
+      <div id="text-container" class="col" style = "border:2px solid rgb(88, 86, 86); background-color: #ffffff;">
+      </div>
+    </div>
+
+    <div id="message-container"></div>
+    <div  class="row text-center justify-content-center">
+      <div class="col">
+        <form id="send-container">
+          <input type="text" id="message-input">
+          <button type="submit" id="send-button">Send</button>
+        </form>
+      </div>
+    </div>
+    <div id="message-container"></div>
+
+    
+    
+    
+    <!-- <script type="module" src="public/multiplayer.js"></script> -->
 </body>
 </html>

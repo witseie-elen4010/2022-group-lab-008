@@ -1,9 +1,15 @@
+const socket = io('http://localhost:3000')
+const messageContainer = document.getElementById('message-container')
+const messageForm = document.getElementById('send-container')
+const messageInput = document.getElementById('message-input')
+
+
 // Creating a Wordle class
 class Wordle {
   constructor(guessWord = '') {
     this.newWord = ''
     this.guessNumber = 1
-    this.oppNewWord = 'CRANE'
+    this.oppNewWord = ''
     this.oppGuessNumber = 1
     this.guessWord = guessWord
     this.win = null
@@ -100,9 +106,8 @@ class Wordle {
     }
   }
 
-
   oppColourWord() {
-    if (this.newWord.length < 5) {
+    if (this.oppNewWord.length < 5) {
       // alert("Word Too short")
     } else {
       // change colour of word...
@@ -141,6 +146,19 @@ class Wordle {
     }
   }
 
+  // reset(){
+  //   this.newWord = ''
+  //   this.guessNumber = 1
+  //   for (let i = 1; i < 6; i++) {
+  //     const rowId = '#row' + 1
+  //     const row = document.querySelector(rowId)
+  //     for (let j = 0; i < 12; i++) {
+  //       console.log(i);
+  //     }
+  //   }
+
+  // }
+
   updateGrid() {
     const rowId = '#row' + this.guessNumber
     const row = document.querySelector(rowId)
@@ -160,6 +178,13 @@ class Wordle {
   }
 }
 
+// socket functions
+// this changed what is inside of the function
+function appendMessage(message) {
+  const messageElement = document.getElementById('text-container')
+  messageElement.innerText = message
+}
+
 // Aquire word from .ejs file and server
 const test = document.getElementsByClassName('wordVal')
 const testValue = test[0].dataset.testValue
@@ -172,10 +197,34 @@ const winMsg = document.getElementById('winMsg')
 const loseMSg = document.getElementById('loseMsg')
 // loseMSg.setAttribute("hidden", "hidden");
 
+console.log(wordle.guessWord)
+
+
+const name = prompt('What is your name?')
+appendMessage('You joined')
+socket.emit('new-user', { name: name, word: wordle.guessWord })
+
+socket.on('chat-message', data => {
+  appendMessage(`${data.name}: ${data.message}`)
+})
+
+socket.on('incoming-word', word => {
+  //here is where we do the wordle thing.
+  wordle.oppNewWord = word.message
+  wordle.oppGuessNumber = word.guess
+  wordle.oppColourWord()
+  appendMessage(wordle.oppNewWord)
+})
+
+socket.on('user-connected', data => {
+  appendMessage(`${data.name} connected: GuessWord updated.`)
+ 
+  wordle.guessWord = data.word
+})
 
 const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {
-  button.addEventListener('click', () => {
+  button.addEventListener('click', e => {
     switch (button.innerText) {
       case 'DEL':
         wordle.deleteLetter()
@@ -199,8 +248,12 @@ letterButtons.forEach(button => {
           })
           .then((data) => {
             if (data.truth) {
+              // where the socket features happen
+              const message = wordle.newWord
+              socket.emit('send-word', { message: message, guess: wordle.guessNumber })
               wordle.colourWord()
               wordle.enterWord()
+
               if (wordle.win != null) {
                 backBtn.removeAttribute('hidden')
                 if (wordle.win === true) {
@@ -219,6 +272,13 @@ letterButtons.forEach(button => {
       case 'Return Home':
         // TODO code that sends user back to gamemode selection screen
         break
+      case 'Send':
+        e.preventDefault()
+        const message = messageInput.value
+        appendMessage(`You: ${message}`) // appends on your side
+        socket.emit('send-chat-message', message)
+        messageInput.value = ''
+        break
       default:
         wordle.appendLetter(button.innerText)
         wordle.updateGrid()
@@ -226,4 +286,6 @@ letterButtons.forEach(button => {
   })
 })
 
-module.exports = { Wordle }
+
+
+// module.exports = { Wordle }
