@@ -16,7 +16,7 @@ class Wordle {
     }
   }
 
-  deleteLetter () {
+  deleteLetter() {
     // simply pop from string
     this.newWord = this.newWord.substring(0, this.newWord.length - 1)
   }

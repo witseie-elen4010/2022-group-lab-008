@@ -15,26 +15,21 @@
 <body>
 
   <div class="text-center">
-    <h1>GAMEMODE</h1>
+    <h1>Player Role</h1>
   </div>
 
   <div class="row mt-4 text-center justify-content-center">
     <div class = "col-2">
-      <a class="btn btn-primary" href='/singleplayer' method = "POST" role="button">Singleplayer</a>
+      <a class="btn btn-primary" href='/hangman' method = "POST" role="button">ADMIN</a>
     </div>
     <div class = "col-2">
-      <a class="btn btn-primary" href='/lobby' method = "POST" role="button">Multiplayer</a>
-    </div>  
-    <div class = "col-2">
-      <a class="btn btn-primary" href='/hangLobby' method = "POST" role="button">Hangman</a>
+      <a class="btn btn-primary" href='/multiplayer' method = "POST" role="button">PLayer1</a>
     </div> 
     <div class = "col-2">
-      <a class="btn btn-primary" href='/singleplayer' method = "POST" role="button">LOGS</a>
-    </div>
-    <%if(locals.usernameCookie){%>
-      <p>You are logged in as <%=usernameCookie%></p>
-      <a href="/logout">Logout</a>
-      <%}%>
+        <a class="btn btn-primary" href='/multiplayer' method = "POST" role="button">PLayer2</a>
+      </div>
+ </div> 
+
 </body>
 </html>
 

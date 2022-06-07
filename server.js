@@ -142,6 +142,14 @@ app.get('/getLogs', (req, res) => {
   res.render('logs', { logs })
 })
 
+app.get('/hangLobby', (req, res) => {
+  res.render('hangLobby', { rooms: rooms })
+})
+
+app.get('/hangman', (req, res) => {
+  res.render('hangman', { rooms: rooms })
+})
+
 // multiplayer
 app.get('/:Multiplayer', (req, res) => {
   dataQuery.getRandomWord()
@@ -165,5 +173,8 @@ io.on('connection', socket => {
   })
   socket.on('send-word', message => {
     socket.broadcast.emit('incoming-word', { message: message.message, guess: message.guess })
+  })
+  socket.on('admin-word', message => {
+    socket.broadcast.emit('incoming-admin-word', { message: message })
   })
 })
