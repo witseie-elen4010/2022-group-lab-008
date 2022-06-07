@@ -9,12 +9,9 @@ class Wordle {
 
   gameResult() {
     if (this.guessWord === this.newWord) {
-      // alert('Well Done You Win !!!')
       this.win = true
-      // console.log("YOU WIN!")
     }
     if (this.guessNumber === 6 & this.guessWord !== this.newWord) {
-      // alert("You Have lost The Game :(")
       this.win = false
     }
   }
@@ -70,7 +67,6 @@ class Wordle {
 
             const letterId = this.guessWord[i]
             const letterBtn = document.getElementById(letterId)
-            //console.log(letterBtn.style.backgroundColor)
             if (letterBtn.style.backgroundColor !== 'rgb(0, 128, 0)') { letterBtn.style.backgroundColor = 'rgb(177, 185, 53)' }
             break
           } 
@@ -123,11 +119,8 @@ const testValue = test[0].dataset.testValue
 const wordle = new Wordle(testValue.replace(/['"]+/g, '').toUpperCase())
 
 const backBtn = document.getElementById('backBtn')
-// backBtn.setAttribute("hidden", "hidden");
 const winMsg = document.getElementById('winMsg')
-// winMsg.setAttribute("hidden","hidden");
 const loseMSg = document.getElementById('loseMsg')
-// loseMSg.setAttribute("hidden", "hidden");
 
 const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {

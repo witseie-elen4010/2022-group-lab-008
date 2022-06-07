@@ -3,6 +3,8 @@
  */
 // const { test } = require('picomatch');
 
+
+//Mock singlePLayer.ejs file
 jest.mock('../views/singlePlayer.ejs')
 document.body.innerHTML = `
 <div class='wordVal' data-test-value='<%= JSON.stringify('words') %>'></div>
