@@ -4,6 +4,8 @@ const path = require('path')
 const dataQuery = require('./db/dbQueries')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const bcrypt = require('bcryptjs')
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 const wordlist = []
 const usernames = []
@@ -74,24 +76,25 @@ app.get('/registerComplete', (req, res) => {
   res.render('welcome')
 })
 
-app.post('/validateUsername', (req, res) => {
-  const usernameIsAvailable = !usernames.includes(req.body.username)
-  const username = req.body.username
-  const password = req.body.password
-  if (usernameIsAvailable) {
-    dataQuery.addUserInfo(username, password)
-    usernames.push(username)
-    passwords.push(password)
+app.post('/validateUsername', async (req, res) => {
+  try {
+    usernameIsAvailable = !usernames.includes(req.body.username)
+    username = req.body.username
+    password = req.body.password
+    if (usernameIsAvailable) {
+      const hash = await bcrypt.hash(password, 10)
+      dataQuery.addUserInfo(username, hash)
+      usernames.push(username)
+      passwords.push(hash)
+    }
+    res.json({ truth: usernameIsAvailable })
+  } catch (error) {
+    console.log('Error: ' + error)
   }
-  res.json({ truth: usernameIsAvailable })
 })
 
 // AfterLogin
 app.post('/', (req, res) => {
-  if (usernames.includes(req.cookies.usernameCookie)) {
-    res.render('gameMode')
-    return
-  }
   if (!usernames.includes(req.body.username)) {
     res.send(`<h1>Username Incorrect</h1> 
         <div class = row>
@@ -100,9 +103,10 @@ app.post('/', (req, res) => {
     return
   }
   const index = usernames.indexOf(req.body.username)
-  if (passwords[index] === req.body.password) {
+  const verified = bcrypt.compareSync(req.body.password, passwords[index])
+  if (verified) {
     res.cookie('usernameCookie', req.body.username)
-    res.cookie('passwordCookie', req.body.password)
+    res.cookie('passwordCookie', passwords[index])
     res.render('gameMode')
   } else {
     res.send(`<h1>Password Incorrect</h1> 
