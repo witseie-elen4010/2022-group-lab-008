@@ -123,6 +123,17 @@ app.get('/lobby', (req, res) => {
   res.render('lobby', { rooms: rooms })
 })
 
+app.get('/hangLobby', (req, res) => {
+  res.render('hangLobby', { rooms: rooms })
+})
+
+
+app.get('/hangman', (req, res) => {
+  res.render('hangman')
+})
+
+
+
 // multiplayer
 app.get('/:Multiplayer', (req, res) => {
   dataQuery.getRandomWord()
