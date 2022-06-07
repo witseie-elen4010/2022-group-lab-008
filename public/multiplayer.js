@@ -214,6 +214,12 @@ socket.on('incoming-word', word => {
   wordle.oppColourWord()
 })
 
+socket.on('incoming-admin-word', word => {
+  //here is where we do the wordle thing.
+  wordle.guessWord = word.message
+  appendMessage(`Admin Has Chosen The Word`)
+})
+
 socket.on('user-connected', data => {
   appendMessage(`${data.name} connected: GuessWord updated.`)
   wordle.guessWord = data.word
