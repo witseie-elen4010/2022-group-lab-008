@@ -5,3 +5,8 @@
 Authors:
 
 Keon Roohani, Enkosi Ngewu, Nomthandazo Magwaza, Joseph Baggott, Hraklis Papageorgiou
+
+Game Link:
+
+	- https://wordlewithfriends.azurewebsites.net
+
