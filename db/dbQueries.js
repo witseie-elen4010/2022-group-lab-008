@@ -70,5 +70,7 @@ module.exports = {
   getRandomWord,
   getAllWords,
   getAllUserInfo,
-  addUserInfo
+  addUserInfo,
+  sendLog,
+  getPlayerLog
 }

@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 const dataQuery = require('./db/dbQueries')
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 app.use(bodyParser.json());
 const wordlist = []
 const usernames = []
@@ -25,6 +26,8 @@ dataQuery.getAllUserInfo()
     })
   })
 
+//Allowing use of cookies
+app.use(cookieParser());
 
 // adding the path to public
 app.use('/public', express.static('./public/'))
@@ -66,6 +69,12 @@ app.post('/validateUsername',  (req, res) => {
 
 // AfterLogin
 app.post('/', (req, res) => {
+  if (usernames.includes(req.cookies.usernameCookie))
+  {
+    console.log('Working')
+    res.render('gameMode')
+    return
+  }
   if (!usernames.includes(req.body.username)) {
     res.send(`<h1>Username Incorrect</h1> 
         <div class = row>
@@ -75,6 +84,8 @@ app.post('/', (req, res) => {
   }
   const index = usernames.indexOf(req.body.username)
   if (passwords[index] === req.body.password) {
+    res.cookie(`usernameCookie`,req.body.username);
+    res.cookie(`passwordCookie`,req.body.password);
     res.render('gameMode')
   }
   else {
