@@ -12,16 +12,15 @@ class Wordle {
     this.oppGuessNumber = 1
     this.guessWord = guessWord
     this.win = null
+    this.oppWin = null
+    this.trueWinner = null
   }
 
   gameResult() {
     if (this.guessWord === this.newWord) {
-      // alert('Well Done You Win !!!')
       this.win = true
-      // console.log("YOU WIN!")
     }
     if (this.guessNumber === 6 & this.guessWord !== this.newWord) {
-      // alert("You Have lost The Game :(")
       this.win = false
     }
   }
@@ -47,6 +46,7 @@ class Wordle {
     } else {
       // Updating the guessNumber
       this.gameResult()
+      this.realWinner()
       this.guessNumber = this.guessNumber + 1
       this.newWord = ''
     }
@@ -77,7 +77,6 @@ class Wordle {
 
             const letterId = this.guessWord[i]
             const letterBtn = document.getElementById(letterId)
-            //console.log(letterBtn.style.backgroundColor)
             if (letterBtn.style.backgroundColor !== 'rgb(0, 128, 0)') { letterBtn.style.backgroundColor = 'rgb(177, 185, 53)' }
             break
           } 
@@ -145,18 +144,24 @@ class Wordle {
     }
   }
 
-  // reset(){
-  //   this.newWord = ''
-  //   this.guessNumber = 1
-  //   for (let i = 1; i < 6; i++) {
-  //     const rowId = '#row' + 1
-  //     const row = document.querySelector(rowId)
-  //     for (let j = 0; i < 12; i++) {
-  //       console.log(i);
-  //     }
-  //   }
-
-  // }
+  realWinner() {
+    if(this.oppWin != null && this.win != null){
+      if(this.win == true && this.oppWin == false){
+        this.trueWinner = true
+      }
+      if(this.win == false){
+        this.trueWinner = false
+      }
+      if(this.win == true && this.oppWin == true){
+        if(this.guessNumber <= this.oppGuessNumber){
+          this.trueWinner = true
+        } 
+        if(this.guessNumber > this.oppGuessNumber){
+          this.trueWinner = false
+        }
+      }
+    }
+  }
 
   updateGrid() {
     const rowId = '#row' + this.guessNumber
@@ -196,7 +201,6 @@ const winMsg = document.getElementById('winMsg')
 const loseMSg = document.getElementById('loseMsg')
 // loseMSg.setAttribute("hidden", "hidden");
 
-console.log(wordle.guessWord)
 
 
 const name = prompt('What is your name?')
@@ -212,13 +216,44 @@ socket.on('incoming-word', word => {
   wordle.oppNewWord = word.message
   wordle.oppGuessNumber = word.guess
   wordle.oppColourWord()
+  if(word.message == wordle.guessWord){
+    wordle.oppWin = true
+  }
+  if(word.message != wordle.guessWord && word.guess == 6){
+    wordle.oppWin = false
+  }
+  // if(wordle.oppWin != null && wordle.win != null){
+  //   if(wordle.win == true && wordle.oppWin == false){
+  //     wordle.trueWinner = true
+  //   }
+  //   if(wordle.win == false){
+  //     wordle.trueWinner = false
+  //   }
+  //   if(wordle.win == true && wordle.oppWin == true){
+  //     console.log("Working")
+  //     if(wordle.guessNumber <= word.guess){
+  //       wordle.trueWinner = true
+  //     } 
+  //     if(wordle.guessNumber > word.guess){
+  //       wordle.trueWinner = false
+  //     }
+  //   }
+  // }
+  // if(wordle.trueWinner == true){
+  //   console.log("I WIN")
+  // }
+  // if(wordle.trueWinner == false){
+  //   console.log("I LOSE")
+  // }
 })
+
 
 socket.on('incoming-admin-word', word => {
   //here is where we do the wordle thing.
   wordle.guessWord = word.message
   appendMessage(`Admin Has Chosen The Word`)
 })
+
 
 socket.on('user-connected', data => {
   appendMessage(`${data.name} connected: GuessWord updated.`)
@@ -227,6 +262,12 @@ socket.on('user-connected', data => {
 
 const letterButtons = document.querySelectorAll('button')
 letterButtons.forEach(button => {
+  if (wordle.trueWinner === true) {
+    winMsg.removeAttribute('hidden')
+  }
+  if (wordle.trueWinner === false) {
+    loseMSg.removeAttribute('hidden')
+  }
   button.addEventListener('click', e => {
     switch (button.innerText) {
       case 'DEL':
@@ -234,6 +275,7 @@ letterButtons.forEach(button => {
         wordle.updateGrid()
         break
       case 'ENTER':
+        //wordle.totalWinner()
         // just a test. 
         wordle.oppColourWord()
         fetch('/check', {
@@ -256,21 +298,20 @@ letterButtons.forEach(button => {
               socket.emit('send-word', { message: message, guess: wordle.guessNumber })
               wordle.colourWord()
               wordle.enterWord()
-
-              if (wordle.win != null) {
-                backBtn.removeAttribute('hidden')
-                if (wordle.win === true) {
-                  winMsg.removeAttribute('hidden')
-                }
-                if (wordle.win === false) {
-                  loseMSg.removeAttribute('hidden')
-                }
-              }
             }
             else {
               alert('Not a word')
             }
-          });
+          }); 
+          if (wordle.trueWinner != null) {
+            backBtn.removeAttribute('hidden')
+            if (wordle.trueWinner === true) {
+              winMsg.removeAttribute('hidden')
+            }
+            if (wordle.trueWinner === false) {
+              loseMSg.removeAttribute('hidden')
+            }
+          }
         break
       case 'Return Home':
         // TODO code that sends user back to gamemode selection screen
@@ -285,9 +326,13 @@ letterButtons.forEach(button => {
       default:
         wordle.appendLetter(button.innerText)
         wordle.updateGrid()
+        wordle.realWinner()
+
+        
     }
   })
 })
+
 
 
 // module.exports = { Wordle }
