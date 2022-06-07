@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-jest.mock('../views/signup.ejs')
+jest.mock('../views/signUp.ejs')
 document.body.innerHTML =`
 <body>
     <div class="container">
