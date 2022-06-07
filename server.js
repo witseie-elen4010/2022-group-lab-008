@@ -127,11 +127,9 @@ app.get('/hangLobby', (req, res) => {
   res.render('hangLobby', { rooms: rooms })
 })
 
-
 app.get('/hangman', (req, res) => {
   res.render('hangman')
 })
-
 
 
 // multiplayer
